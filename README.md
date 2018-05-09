@@ -15,8 +15,8 @@ Please see [rotationnet](https://github.com/kanezaki/rotationnet) repository for
 [Su et al. 2015] H. Su, S. Maji, E. Kalogerakis, E. Learned-Miller. Multi-view Convolutional Neural Networks for 3D Shape Recognition. ICCV2015.  
    
 ### 2. Prepare dataset directories for training
-    $ bash link_images.sh ./modelnet40v1png ./ModelNet40v1  
-    $ bash link_images.sh ./modelnet40v2png ./ModelNet40_20  
+    $ bash link_images.sh ./modelnet40v1png ./ModelNet40v1 1  
+    $ bash link_images.sh ./modelnet40v2png ./ModelNet40_20 2  
 
 ### 3. Train your own RotationNet models
 #### 3-1. Case (2): Train the model w/o upright orientation (RECOMMENDED)

@@ -23,3 +23,17 @@ done
 cd $output/
 ln -s test val
 cd ..
+
+rm -f $output/{train,test}/*/*.off
+if [ $3 == 2 ]
+then
+    for ((i=0;i<20;i++))
+    do
+	for ((j=2;j<5;j++))
+	do
+	    n=`expr $i \* 4 + $j`
+	    fn=`printf "%03d" $n`
+	    rm -f $output/{train,test}/*/*_$fn.png
+	done
+    done
+fi
