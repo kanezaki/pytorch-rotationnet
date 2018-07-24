@@ -25,3 +25,16 @@ Please see [rotationnet](https://github.com/kanezaki/rotationnet) repository for
     $ python train_rotationnet.py --pretrained -a alexnet -b 400 --lr 0.01 --epochs 1500 ./ModelNet40_20 | tee log_ModelNet40_20_rotationnet.txt
 #### 3-2. Case (1): Train the model with upright orientation
     $ python train_rotationnet.py --case 1 --pretrained -a alexnet -b 240 --lr 0.01 --epochs 1500 ./ModelNet40v1 | tee log_ModelNet40v1_rotationnet.txt 
+
+## Training/testing MIRO dataset
+
+### 1. Download MIRO dataset (414MB)
+    $ wget https://data.airc.aist.go.jp/kanezaki.asako/data/MIRO.zip  
+    $ unzip MIRO.zip 
+
+### 2. Prepare dataset directories for training
+    $ bash link_images_MIRO.sh ./MIRO ./data_MIRO
+
+### 3. Train your own RotationNet models
+#### 3-1. Case (3): Train the model w/ upright orientation
+    $ python train_rotationnet.py --case 3 --pretrained -a alexnet -b 480 --lr 0.01 --epochs 1500 ./data_MIRO | tee log_MIRO_160_rotationnet.txt

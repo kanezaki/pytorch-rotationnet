@@ -128,6 +128,9 @@ def main():
     if args.case == '1':
         vcand = np.load('vcand_case1.npy')
         nview = 12
+    elif args.case == '3':
+        vcand = np.load('vcand_case3.npy')
+        nview = 160
 
     if args.batch_size % nview != 0:
         print 'Error: batch size should be multiplication of the number of views,', nview
