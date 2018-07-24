@@ -10,6 +10,8 @@ Asako Kanezaki, Yasuyuki Matsushita and Yoshifumi Nishida.
 We used caffe for the CVPR submission.
 Please see [rotationnet](https://github.com/kanezaki/rotationnet) repository for more details including how to reproduce the results in our paper.
 
+## Training/testing ModelNet dataset
+
 ### 1. Download multi-view images generated in [Su et al. 2015]
     $ bash get_modelnet_png.sh  
 [Su et al. 2015] H. Su, S. Maji, E. Kalogerakis, E. Learned-Miller. Multi-view Convolutional Neural Networks for 3D Shape Recognition. ICCV2015.  
@@ -20,6 +22,6 @@ Please see [rotationnet](https://github.com/kanezaki/rotationnet) repository for
 
 ### 3. Train your own RotationNet models
 #### 3-1. Case (2): Train the model w/o upright orientation (RECOMMENDED)
-    $ python train_rotationnet_40_classes.py --pretrained -a alexnet -b 400 --lr 0.01 --epochs 1500 ./ModelNet40_20 | tee log_ModelNet40_20_rotationnet.txt
+    $ python train_rotationnet.py --pretrained -a alexnet -b 400 --lr 0.01 --epochs 1500 ./ModelNet40_20 | tee log_ModelNet40_20_rotationnet.txt
 #### 3-2. Case (1): Train the model with upright orientation
-    $ python train_rotationnet_40_classes.py --case 1 --pretrained -a alexnet -b 240 --lr 0.01 --epochs 1500 ./ModelNet40v1 | tee log_ModelNet40v1_rotationnet.txt 
+    $ python train_rotationnet.py --case 1 --pretrained -a alexnet -b 240 --lr 0.01 --epochs 1500 ./ModelNet40v1 | tee log_ModelNet40v1_rotationnet.txt 
