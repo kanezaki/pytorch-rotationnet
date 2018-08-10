@@ -244,6 +244,7 @@ def main():
             inds[ i ] = inds[ 0 ] + i
         inds = inds.T.reshape( nview * train_nsamp )
         train_loader.dataset.imgs = [sorted_imgs[ i ] for i in inds]
+        train_loader.dataset.samples = train_loader.dataset.imgs
 
         # train for one epoch
         train(train_loader, model, criterion, optimizer, epoch)
@@ -267,18 +268,6 @@ def main():
             'optimizer' : optimizer.state_dict(),
         }, is_best,fname,fname2)
 
-        # save checkpoint every 100 epochs
-        fname = 'rotationnet_checkpoint_epoch_'+str(epoch+1)+'.pth.tar'
-        if nview == 12:
-            fname = 'rotationnet_checkpoint_case1_epoch_'+str(epoch+1)+'.pth.tar'
-        if (epoch + 1) % 100 == 0:
-            torch.save({
-                'epoch': epoch + 1,
-                'arch': args.arch,
-                'state_dict': model.state_dict(),
-                'best_prec1': best_prec1,
-                'optimizer' : optimizer.state_dict(),
-            }, fname)
             
 
 def train(train_loader, model, criterion, optimizer, epoch):
