@@ -295,23 +295,31 @@ def train(train_loader, model, criterion, optimizer, epoch):
         num_classes = int( output.size( 1 ) / nview ) - 1
         output = output.view( -1, num_classes + 1 )
 
-        # compute scores and decide target labels
+        ###########################################
+        # compute scores and decide target labels #
+        ###########################################
         output_ = torch.nn.functional.log_softmax( output )
+        # divide object scores by the scores for "incorrect view label" (see Eq.(5))
         output_ = output_[ :, :-1 ] - torch.t( output_[ :, -1 ].repeat( 1, output_.size(1)-1 ).view( output_.size(1)-1, -1 ) )
+        # reshape output matrix
         output_ = output_.view( -1, nview * nview, num_classes )
         output_ = output_.data.cpu().numpy()
         output_ = output_.transpose( 1, 2, 0 )
+        # initialize target labels with "incorrect view label"
         for j in range(target_.size(0)):
-            target_[ j ] = num_classes # incorrect view label
+            target_[ j ] = num_classes
+        # compute scores for all the candidate poses (see Eq.(5))
         scores = np.zeros( ( vcand.shape[ 0 ], num_classes, nsamp ) )
         for j in range(vcand.shape[0]):
             for k in range(vcand.shape[1]):
                 scores[ j ] = scores[ j ] + output_[ vcand[ j ][ k ] * nview + k ]
+        # for each sample #n, determine the best pose that maximizes the score for the target class (see Eq.(2))
         for n in range( nsamp ):
             j_max = np.argmax( scores[ :, target[ n * nview ], n ] )
             # assign target labels
             for k in range(vcand.shape[1]):
                 target_[ n * nview * nview + vcand[ j_max ][ k ] * nview + k ] = target[ n * nview ]
+        ###########################################
 
         target_ = target_.cuda(async=True)
         target_var = torch.autograd.Variable(target_)
@@ -448,9 +456,11 @@ def my_accuracy(output_, target, topk=(1,)):
     output_ = output_.transpose( 1, 2, 0 )
     scores = np.zeros( ( vcand.shape[ 0 ], num_classes, batch_size ) )
     output = torch.zeros( ( batch_size, num_classes ) )
+    # compute scores for all the candidate poses (see Eq.(6))
     for j in range(vcand.shape[0]):
         for k in range(vcand.shape[1]):
             scores[ j ] = scores[ j ] + output_[ vcand[ j ][ k ] * nview + k ]
+    # for each sample #n, determine the best pose that maximizes the score (for the top class)
     for n in range( batch_size ):
         j_max = int( np.argmax( scores[ :, :, n ] ) / scores.shape[ 1 ] )
         output[ n ] = torch.FloatTensor( scores[ j_max, :, n ] )
