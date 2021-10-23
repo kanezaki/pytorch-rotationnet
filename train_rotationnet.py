@@ -133,7 +133,7 @@ def main():
         nview = 160
 
     if args.batch_size % nview != 0:
-        print 'Error: batch size should be multiplication of the number of views,', nview
+        print ('Error: batch size should be multiplication of the number of views,', nview)
         exit()
 
     if args.distributed:
@@ -321,12 +321,12 @@ def train(train_loader, model, criterion, optimizer, epoch):
                 target_[ n * nview * nview + vcand[ j_max ][ k ] * nview + k ] = target[ n * nview ]
         ###########################################
 
-        target_ = target_.cuda(async=True)
+        target_ = target_.cuda()
         target_var = torch.autograd.Variable(target_)
 
         # compute loss
         loss = criterion(output, target_var)
-        losses.update(loss.data[0], input.size(0))
+        losses.update(loss.item(), input.size(0))
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -357,7 +357,7 @@ def validate(val_loader, model, criterion):
 
     end = time.time()
     for i, (input, target) in enumerate(val_loader):
-        target = target.cuda(async=True)
+        target = target.cuda()
         input_var = torch.autograd.Variable(input, volatile=True)
         target_var = torch.autograd.Variable(target, volatile=True)
 
@@ -374,9 +374,9 @@ def validate(val_loader, model, criterion):
 
         # measure accuracy and record loss
         prec1, prec5 = my_accuracy(output.data, target, topk=(1, 5))
-        losses.update(loss.data[0], input.size(0))
-        top1.update(prec1[0], input.size(0)/nview)
-        top5.update(prec5[0], input.size(0)/nview)
+        losses.update(loss.item(), input.size(0))
+        top1.update(prec1.item(), input.size(0)/nview)
+        top5.update(prec5.item(), input.size(0)/nview)
 
         # measure elapsed time
         batch_time.update(time.time() - end)
@@ -472,7 +472,7 @@ def my_accuracy(output_, target, topk=(1,)):
 
     res = []
     for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0)
+        correct_k = correct[:k].reshape(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 
