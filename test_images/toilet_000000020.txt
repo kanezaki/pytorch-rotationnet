@@ -1,0 +1,3 @@
+test_images/toilet_000000020_019.png 18
+test_images/toilet_000000020_020.png 19
+test_images/toilet_000000020_001.png 0
