@@ -25,7 +25,7 @@ ln -s test val
 cd ..
 
 rm -f $output/{train,test}/*/*.off
-if [ $3 == 2 ]
+if [[ $3 == 2 ]]
 then
     for ((i=0;i<20;i++))
     do
